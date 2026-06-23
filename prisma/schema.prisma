@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model LandingPage {
+  id                   String   @id @default(cuid())
+  companyName          String
+  websiteUrl           String
+  industry             String
+  targetAudience       String
+  productDescription   String
+  businessGoal         String
+  toneOfVoice          String
+  ctaGoal              String
+  seoTitle             String
+  metaDescription      String
+  heroHeadline         String
+  heroSubheading       String
+  ctaText              String
+  painPoints           String
+benefits             String
+faqs                 String
+variations           String
+personalizationIdeas String
+  status               String   @default("DRAFT")
+  views                Int      @default(0)
+  clicks               Int      @default(0)
+  conversionRate       Float    @default(0)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@index([companyName])
+  @@index([industry])
+  @@index([status])
+  @@index([createdAt])
+}
