@@ -2,18 +2,23 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { LandingPageStatus } from "@prisma/client";
 import { prisma } from "@/lib/db/prisma";
 import { toLandingPageRecord } from "@/lib/db/mappers";
 import { landingPageSaveSchema } from "@/lib/schemas/landing-page";
-import type { LandingPageRecord } from "@/types/landing-page";
+import type { LandingPageRecord, LandingPageStatus } from "@/types/landing-page";
+
+const landingPageStatuses: LandingPageStatus[] = ["DRAFT", "READY", "PUBLISHED"];
+
+function isLandingPageStatus(value: string | undefined): value is LandingPageStatus {
+  return Boolean(value && landingPageStatuses.includes(value as LandingPageStatus));
+}
 
 export async function listLandingPages(params?: {
   query?: string;
   status?: string;
 }): Promise<LandingPageRecord[]> {
   const query = params?.query?.trim();
-  const status = params?.status as LandingPageStatus | undefined;
+  const status = params?.status;
 
   const pages = await prisma.landingPage.findMany({
     where: {
@@ -26,7 +31,7 @@ export async function listLandingPages(params?: {
             ]
           }
         : {}),
-      ...(status && Object.values(LandingPageStatus).includes(status) ? { status } : {})
+      ...(isLandingPageStatus(status) ? { status } : {})
     },
     orderBy: { updatedAt: "desc" }
   });
@@ -49,14 +54,14 @@ export async function createLandingPage(data: unknown) {
     data: {
       ...parsed,
       painPoints: JSON.stringify(parsed.painPoints),
-benefits: JSON.stringify(parsed.benefits),
-faqs: JSON.stringify(parsed.faqs),
-variations: JSON.stringify(parsed.variations),
-personalizationIdeas: JSON.stringify(parsed.personalizationIdeas),
+      benefits: JSON.stringify(parsed.benefits),
+      faqs: JSON.stringify(parsed.faqs),
+      variations: JSON.stringify(parsed.variations),
+      personalizationIdeas: JSON.stringify(parsed.personalizationIdeas),
       views,
       clicks,
       conversionRate,
-      status: LandingPageStatus.READY
+      status: "READY"
     }
   });
 
@@ -65,7 +70,8 @@ personalizationIdeas: JSON.stringify(parsed.personalizationIdeas),
 }
 
 export async function updateLandingPage(id: string, formData: FormData) {
-  const status = formData.get("status")?.toString() as LandingPageStatus | undefined;
+  const status = formData.get("status")?.toString();
+
   const page = await prisma.landingPage.update({
     where: { id },
     data: {
@@ -74,10 +80,7 @@ export async function updateLandingPage(id: string, formData: FormData) {
       heroHeadline: formData.get("heroHeadline")?.toString() ?? "",
       heroSubheading: formData.get("heroSubheading")?.toString() ?? "",
       ctaText: formData.get("ctaText")?.toString() ?? "",
-      status:
-        status && Object.values(LandingPageStatus).includes(status)
-          ? status
-          : LandingPageStatus.DRAFT
+      status: isLandingPageStatus(status) ? status : "DRAFT"
     }
   });
 

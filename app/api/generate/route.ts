@@ -11,7 +11,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ generated });
   } catch (error) {
     const message =
-      error instanceof Error ? error.message : "Unable to generate landing page strategy.";
+      error instanceof Error
+        ? error.message
+        : "Unable to generate landing page strategy.";
+
     return NextResponse.json({ error: message }, { status: 400 });
   }
 }
