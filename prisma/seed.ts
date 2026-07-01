@@ -24,19 +24,19 @@ async function main() {
       heroSubheading:
         "Northstar Analytics turns fragmented go-to-market data into clear conversion paths, expansion signals, and campaign decisions your team can act on.",
       ctaText: "Book a demo",
-      painPoints: [
+      painPoints: JSON.stringify([
         "Growth data lives across tools that do not agree.",
         "Teams struggle to connect product usage to revenue outcomes.",
         "Campaign decisions take too long because reporting is manual.",
         "High-intent accounts are missed before sales can engage."
-      ],
-      benefits: [
+      ]),
+      benefits: JSON.stringify([
         "Unify product, CRM, and attribution data in one workspace.",
         "Identify the accounts most likely to convert or expand.",
         "Prioritize campaigns around measurable revenue movement.",
         "Give growth and sales teams a shared source of truth."
-      ],
-      faqs: [
+      ]),
+      faqs: JSON.stringify([
         {
           question: "Who should use Northstar Analytics?",
           answer:
@@ -57,8 +57,8 @@ async function main() {
           answer:
             "Start with qualified demo bookings, account engagement, pipeline influence, and expansion-ready account volume."
         }
-      ],
-      variations: [
+      ]),
+      variations: JSON.stringify([
         {
           name: "Executive",
           audienceSegment: "Revenue executives",
@@ -86,8 +86,8 @@ async function main() {
           cta: "Find revenue signals",
           angle: "Account prioritization"
         }
-      ],
-      personalizationIdeas: [
+      ]),
+      personalizationIdeas: JSON.stringify([
         {
           segment: "Organic search visitors",
           message: "Lead with category education and revenue analytics use cases.",
@@ -103,8 +103,8 @@ async function main() {
           message: "Show proof, integrations, and implementation confidence.",
           offer: "ROI walkthrough"
         }
-      ],
-      status: "PUBLISHED",,
+      ]),
+      status: "PUBLISHED",
       views: 18420,
       clicks: 1786,
       conversionRate: 9.7
